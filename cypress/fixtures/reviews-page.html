@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head><title>Mock Performance Reviews</title></head>
+<body>
+  <h1>Performance Reviews</h1>
+
+  <form id="create-review-form">
+    <input id="review-title" type="text" placeholder="Review title" />
+    <textarea id="review-comment" placeholder="Your comment"></textarea>
+    <button id="create-btn" type="submit">Create Review</button>
+  </form>
+
+  <ul id="review-list"></ul>
+
+  <script>
+    document.getElementById('create-review-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const title = document.getElementById('review-title').value.trim();
+      const comment = document.getElementById('review-comment').value.trim();
+      if (!title) return;
+
+      const li = document.createElement('li');
+      li.className = 'review-item';
+      li.innerHTML = `
+        <span class="review-title">${title}</span>
+        <span class="review-comment">${comment}</span>
+        <span class="review-status">Draft</span>
+        <button class="submit-review">Submit</button>
+      `;
+      document.getElementById('review-list').appendChild(li);
+
+      document.getElementById('review-title').value = '';
+      document.getElementById('review-comment').value = '';
+    });
+
+    document.getElementById('review-list').addEventListener('click', function(e) {
+      if (e.target.classList.contains('submit-review')) {
+        const li = e.target.closest('li');
+        li.querySelector('.review-status').textContent = 'Submitted';
+        e.target.remove();
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head><title>Mock HR Login</title></head>
+<body>
+  <h1>Mock HR System</h1>
+  <form id="login-form">
+    <input id="username" type="text" placeholder="Username" />
+    <input id="password" type="password" placeholder="Password" />
+    <button id="login-btn" type="submit">Login</button>
+  </form>
+  <div id="dashboard" style="display:none;">
+    <h2 id="welcome"></h2>
+    <p id="role-info"></p>
+  </div>
+  <script>
+    function showDashboard(user) {
+      const dashboard = document.getElementById('dashboard');
+      const welcome = document.getElementById('welcome');
+      const roleInfo = document.getElementById('role-info');
+
+      if (user === 'employee') {
+        welcome.textContent = 'Welcome, Employee';
+        roleInfo.textContent = 'You can view your own reviews.';
+      } else if (user === 'manager') {
+        welcome.textContent = 'Welcome, Manager';
+        roleInfo.textContent = 'You can view your team reviews.';
+      }
+      dashboard.style.display = 'block';
+    }
+
+    // On page load: check if a session cookie exists
+    const cookies = document.cookie.split(';').map(c => c.trim());
+    const sessionCookie = cookies.find(c => c.startsWith('loggedInUser='));
+    if (sessionCookie) {
+      const user = sessionCookie.split('=')[1];
+      showDashboard(user);
+    }
+
+    document.getElementById('login-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const user = document.getElementById('username').value;
+      const pass = document.getElementById('password').value;
+
+      if ((user === 'employee' && pass === 'emp123') || (user === 'manager' && pass === 'mgr123')) {
+        document.cookie = `loggedInUser=${user}; path=/`;
+        showDashboard(user);
+      } else {
+        alert('Invalid credentials');
+      }
+    });
+  </script>
+</body>
+</html>
